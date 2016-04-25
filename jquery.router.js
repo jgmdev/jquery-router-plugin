@@ -1,20 +1,20 @@
 /*
-    Copyright 2011  camilo tapia // 24hr (email : camilo.tapia@gmail.com)
-    Copyright 2015 Christoph Obexer <cobexer@gmail.com>
-    Copyright 2016 Jefferson Gonzalez <jgmdev@gmail.com>
+Copyright 2011  camilo tapia // 24hr (email : camilo.tapia@gmail.com)
+Copyright 2015 Christoph Obexer <cobexer@gmail.com>
+Copyright 2016 Jefferson Gonzalez <jgmdev@gmail.com>
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 2, as
-    published by the Free Software Foundation.
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License, version 2, as
+published by the Free Software Foundation.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 /* jshint bitwise: true, curly: true, eqeqeq: true, forin: true, freeze: true, latedef: true,
  maxerr: 1000, noarg: true, undef:true, unused: true, browser: true, jquery: true, laxcomma: true */
@@ -30,6 +30,7 @@
 	// hold the latest route that was activated
 	router.currentId = "";
 	router.currentParameters = {};
+	router.currentBindEvent = {};
 
 	function stripSlash(url) {
 		var u = url.replace(/[/]+/g, '/'); // normalize multiple consecutive slashes to a single slash
@@ -141,39 +142,39 @@
 			history.pushState({}, title, root + url + location.search);
 		}
 
-        if(typeof trigger != "boolean" || trigger !== false){
-            checkRoutes(url);
-        }
+		if(typeof trigger != "boolean" || trigger !== false){
+			checkRoutes(url);
+		}
 	};
 
-    // check if a given URL is defined in router
-    router.checkURL = function(url) {
-        var parser, path, path_ltrim, path_rtrim;
+	// check if a given URL is defined in router
+	router.checkURL = function(url) {
+		var parser, path, path_ltrim, path_rtrim;
 
-        if(typeof url == "object"){
-            parser = url;
-        }
-        else {
-            parser = document.createElement('a');
-            parser.href = url;
-        }
+		if(typeof url == "object"){
+			parser = url;
+		}
+		else {
+			parser = document.createElement('a');
+			parser.href = url;
+		}
 
-        path = parser.pathname + parser.hash;
-        path_ltrim = path.replace(/^\//, "");
-        path_rtrim = path_ltrim.replace(/\/$/, "");
+		path = parser.pathname + parser.search + parser.hash;
+		path_ltrim = path.replace(/^\//, "");
+		path_rtrim = path_ltrim.replace(/\/$/, "");
 
-        if(window.location.origin == parser.origin || parser.origin == ""){
-            if(checkRoutes(path_rtrim, false)){
-                return true;
-            } else if(checkRoutes(path_ltrim, false)){
-                return true;
-            }
+		if(window.location.origin == parser.origin || parser.origin == ""){
+			if(checkRoutes(path_rtrim, false)){
+				return true;
+			} else if(checkRoutes(path_ltrim, false)){
+				return true;
+			}
 
-            return checkRoutes(path);
-        }
+			return checkRoutes(path);
+		}
 
-        return false;
-    }
+		return false;
+	}
 
 	// do a check without affecting the history
 	router.check = router.redo = function() {
@@ -235,13 +236,13 @@
 			router.currentParameters = match.data;
 			match.route.callback(router.currentParameters);
 
-            return true;
+			return true;
 		}
 		else if(typeof trigger404 != "boolean" || trigger404 !== false) {
 			$router.triggerHandler('route404', [ url ]);
 		}
 
-        return false;
+		return false;
 	}
 
 	function handleRoutes(e) {
@@ -273,26 +274,27 @@
 		});
 	};
 
-    //binds 'a' elements to router with optional jQuery selector
-    router.bind = function(selector){
-        if(typeof selector == "undefined"){
-            selector = 'a';
-        }
+	//binds 'a' elements to router with optional jQuery selector
+	router.bind = function(selector){
+		if(typeof selector == "undefined"){
+			selector = 'a';
+		}
 
-        $(selector).each(function(index, element){
-            if($(element).is('a')){
-                $(element).click(function(e) {
-                    var url;
-                    url = $(this).attr('href');
-                    if ($.router.checkURL(url)) {
-                        $.router.go(url, null, false);
-                        e.preventDefault();
-                        return false;
-                    }
-                });
-            }
-        });
-    };
+		$(selector).each(function(index, element){
+			if($(element).is('a')){
+				$(element).click(function(e) {
+					$.router.currentBindEvent = e;
+					var url;
+					url = $(this).attr('href');
+					if ($.router.checkURL(url)) {
+						$.router.go(url, null, false);
+						e.preventDefault();
+						return false;
+					}
+				});
+			}
+		});
+	};
 
 	$(window).bind("popstate", handleRoutes);
 	$.router = router;
