@@ -7,14 +7,14 @@ deterministic route ordering.
 
 Setting up your application for use of this plugin is very easy:
 
-#### First, include the neccesary files
+##### First, include the neccesary files
 
 ```html
 <script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
 <script type="text/javascript" src="js/jquery.router.js"></script>
 ```
 
-#### Secondly, setup the routing code
+##### Secondly, setup the routing code
 
 ```js
 $(document).ready(function(){
