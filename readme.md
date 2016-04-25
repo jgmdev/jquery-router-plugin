@@ -43,9 +43,11 @@ $(document).ready(function(){
 To add route you simply call the add function, providing it with the
 actual route string, an optional id, and the callback.
 
-$.router.add(*route*, *[id]*, *callback*);
+```js
+$.router.add(route, [id], callback);
+```
 
-#### Example:
+##### Example:
 
 ```js
 // Adds a route for /items/:item and calls the callback when matched
@@ -61,6 +63,7 @@ or
 // a reference to the routes id in $.router.currentId
 $.router.add("/items/:item", "foo", function(data) {
     console.log(data.item);
+    console.log($.router.currentId);
 });
 ```
 
@@ -72,10 +75,10 @@ false to the trigger parameter, this is useful when you want to change
 the browser location without triggering any event.
 
 ```js
-$.router.go(url, title, trigger);
+$.router.go(url, title, [trigger]);
 ```
 
-#### Example:
+##### Example:
 
 ```js
 // This will change the url to http://www.foo.com/items/42 and set the title to
@@ -111,6 +114,7 @@ $.router.reset();
 ```
 
 ### Events
+
 In case a route attempt leads to no match the ___route404___ event gets
 triggered with the url as argument. To ease event handling $.router.on
 and $.router.off are aliases to jQuerys on and off functions.
