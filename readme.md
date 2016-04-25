@@ -10,7 +10,7 @@ Setting up your application for use of this plugin is very easy:
 ##### First, include the neccesary files
 
 ```html
-<script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery.router.js"></script>
 ```
 
