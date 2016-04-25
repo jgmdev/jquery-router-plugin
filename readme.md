@@ -7,7 +7,7 @@ deterministic route ordering.
 
 Setting up your application for use of this plugin is very easy:
 
-1) Include the this plugin.
+1) Include this plugin.
 2) Optionally call $.router.init with the name of your url argument that
 contains the initial route that should be displayed.
 3) Profit!
@@ -46,10 +46,12 @@ $.router.go(url, title);
 
 Example:
 
-    // This will change the url to http://www.foo.com/items/42 and set the title to
-    // "My cool item" without reloading the page.
-    // If a route has been set that matches it, it will be triggered.
-    $.router.go("/items/42", "My cool item");
+```js
+// This will change the url to http://www.foo.com/items/42 and set the title to
+// "My cool item" without reloading the page.
+// If a route has been set that matches it, it will be triggered.
+$.router.go("/items/42", "My cool item");
+```
 
 Routes are examined from most the specific route to least specific route:
 
@@ -73,11 +75,14 @@ __For more usage examples check the included tests inside the test directory.__
 ### Reseting all routes
 If you need to remove all routes (which is good when testing) you just call:
 
+```js
 $.router.reset();
+```
 
 ### Events
-In case a route attempt leads to no match the ___route404___ event gets triggered with the url as argument:
-to ease event handling $.router.on and $.router.off are aliases to jQuerys on and off functions.
+In case a route attempt leads to no match the ___route404___ event gets
+triggered with the url as argument. To ease event handling $.router.on
+and $.router.off are aliases to jQuerys on and off functions.
 
 ```js
 // register an event handler to respond to route misses.
@@ -85,7 +90,7 @@ $.router.on('route404', function(e, url) {
     console.log('No route for ' + url);
 });
 // unregister all event handlers again.
-$.router.on('route404');
+$.router.off('route404');
 ```
 
 ### Handling browser reloads and incoming deep links
