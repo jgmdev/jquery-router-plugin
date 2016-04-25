@@ -1,24 +1,51 @@
-# jquery router plugin
+# jQuery Router Plugin
 
 This plugin handles routes for push state with a simple api and
 deterministic route ordering.
 
-### Setup
+### Usage
 
 Setting up your application for use of this plugin is very easy:
 
-1) Include this plugin.
-2) Optionally call $.router.init with the name of your url argument that
-contains the initial route that should be displayed.
-3) Profit!
+#### First, include the neccesary files
+
+```html
+<script type="text/javascript" src="js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="js/jquery.router.js"></script>
+```
+
+#### Secondly, setup the routing code
+
+```js
+$(document).ready(function(){
+    // Set the base path used when changing location with $.router.go
+    $.router.chroot('/');
+
+    // Dispatch router when links with a routable class are clicked
+    $.router.bind(".routable");
+
+    // Execute a function each time a path was not registered on router
+    $.router.on('route404', function(event, url) {
+        alert("Path '" + url + "' not found on routing table.");
+    });
+
+    // Add entry to router which is executed each time a user clicks
+    // a .routable link or uses the $.router.go function
+    $.router.add("login", function(){
+        $("#login").slideToggle("fast");
+    });
+});
+```
+
 
 ### How to add routes
+
 To add route you simply call the add function, providing it with the
 actual route string, an optional id, and the callback.
 
 $.router.add(*route*, *[id]*, *callback*);
 
-Example:
+#### Example:
 
 ```js
 // Adds a route for /items/:item and calls the callback when matched
@@ -38,13 +65,17 @@ $.router.add("/items/:item", "foo", function(data) {
 ```
 
 ### How to change urls and trigger routes
-You can also change the current url to a route, and thereby triggering the route by calling *go*.
+
+You can also change the current url to a route, and thereby triggering
+the route by calling *go*. You can disable the route trigger by passing
+false to the trigger parameter, this is useful when you want to change
+the browser location without triggering any event.
 
 ```js
-$.router.go(url, title);
+$.router.go(url, title, trigger);
 ```
 
-Example:
+#### Example:
 
 ```js
 // This will change the url to http://www.foo.com/items/42 and set the title to
@@ -131,4 +162,4 @@ call ```$.router.chroot(root)``` with the path that marks the root of
 what **$.router** should handle / modify.
 
 ## License
-(The MIT License)
+The MIT License
